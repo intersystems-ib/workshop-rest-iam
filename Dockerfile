@@ -1,5 +1,5 @@
 FROM containers.intersystems.com/intersystems/iris:2020.2.0.211.0
-
+ARG WEBINAR_INCLUDE_API
 USER root
 
 COPY --chown=$ISC_PACKAGE_MGRUSER:$ISC_PACKAGE_IRISGROUP irissession.sh /
@@ -10,6 +10,11 @@ RUN mkdir -p /opt/webinar/install
 COPY install /opt/webinar/install
 RUN mkdir -p /opt/webinar/src
 COPY src /opt/webinar/src/
+
+# include API implementation (or not)
+WORKDIR /opt/webinar/
+RUN echo "${WEBINAR_INCLUDE_API}"
+RUN if [ "${WEBINAR_INCLUDE_API}" = "no" ]; then rm -rf src/Webinar/API; fi
 
 # change permissions to IRIS user
 RUN chown -R ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/webinar

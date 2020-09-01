@@ -10,8 +10,10 @@ services:
   irisA:
     build:
       context: .
+      args:
+        WEBINAR_INCLUDE_API: "no"
     container_name: irisA
-    image: workshop-rest-iam:latest
+    image: workshop-rest-iam:noapi
     ports:
     - "52773:52773"
     volumes:
@@ -20,7 +22,11 @@ services:
 
   # irisB instance  
   irisB:
-    image: workshop-rest-iam:latest
+    build:
+      context: .
+      args:
+        WEBINAR_INCLUDE_API: "yes"
+    image: workshop-rest-iam:api
     container_name: irisB
     ports:
     - "52774:52773"
@@ -30,7 +36,11 @@ services:
 
   # irisC instance 
   irisC:
-    image: workshop-rest-iam:latest
+    build:
+      context: .
+      args:
+        WEBINAR_INCLUDE_API: "yes"
+    image: workshop-rest-iam:api
     container_name: irisC
     ports:
     - "52775:52773"
