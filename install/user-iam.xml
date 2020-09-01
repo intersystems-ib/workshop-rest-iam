@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<UsersExport>
+  <Users>
+    <AccountNeverExpires>true</AccountNeverExpires>
+    <AutheEnabled>0</AutheEnabled>
+    <ChangePassword>false</ChangePassword>
+    <CreateDateTime>65559,49486.273898</CreateDateTime>
+    <Enabled>true</Enabled>
+    <ExpirationDate>1840-12-31</ExpirationDate>
+    <Flags>1</Flags>
+    <FullName>User for /api/iam Web Application</FullName>
+    <HOTPKey>0DAcwOp5xQSFDlpul+AeYMhpcF8=</HOTPKey>
+    <HOTPKeyGenerate>false</HOTPKeyGenerate>
+    <HOTPKeyDisplay>false</HOTPKeyDisplay>
+    <LastModifiedDateTime>65623,37019.832752</LastModifiedDateTime>
+    <LastModifiedInfo>
+Enabled modified:
+  New value: Yes
+  Old value: No
+
+Password modified:
+  New value: *****
+  Old value: *****
+</LastModifiedInfo>
+    <LastModifiedUsername>SuperUser</LastModifiedUsername>
+    <Name>IAM</Name>
+    <Password>4BnynQwFCJFECG9ZqINnT3lC/vY=</Password>
+    <PasswordNeverExpires>true</PasswordNeverExpires>
+    <PasswordChangedDateTime>65623,37019.832609</PasswordChangedDateTime>
+    <Roles>
+      <RolesItem>%IAM_API</RolesItem>
+    </Roles>
+    <Salt>FT33QuW0h9c=</Salt>
+  </Users>
+</UsersExport>

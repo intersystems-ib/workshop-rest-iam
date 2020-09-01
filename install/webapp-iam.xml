@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ApplicationsExport>
+  <Applications>
+    <AutheEnabled>32</AutheEnabled>
+    <AutoCompile>false</AutoCompile>
+    <CookiePath>/api/iam/</CookiePath>
+    <CSPZENEnabled>true</CSPZENEnabled>
+    <CSRFToken>false</CSRFToken>
+    <DeepSeeEnabled>false</DeepSeeEnabled>
+    <Description>IAM REST Apis</Description>
+    <DispatchClass>%Api.IAM.v1.disp</DispatchClass>
+    <Enabled>true</Enabled>
+    <HyperEvent>0</HyperEvent>
+    <iKnowEnabled>false</iKnowEnabled>
+    <InbndWebServicesEnabled>false</InbndWebServicesEnabled>
+    <IsNameSpaceDefault>false</IsNameSpaceDefault>
+    <LockCSPName>true</LockCSPName>
+    <Name>/api/iam</Name>
+    <NameSpace>%SYS</NameSpace>
+    <Recurse>true</Recurse>
+    <Resource>%IAM</Resource>
+    <ServeFiles>1</ServeFiles>
+    <ServeFilesTimeout>3600</ServeFilesTimeout>
+    <Timeout>3600</Timeout>
+    <TwoFactorEnabled>false</TwoFactorEnabled>
+    <Type>2</Type>
+    <UseCookies>2</UseCookies>
+  </Applications>
+</ApplicationsExport>

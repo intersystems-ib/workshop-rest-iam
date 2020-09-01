@@ -1,0 +1,14 @@
+{
+    "objectscript.export.folder": "src",
+    "objectscript.conn": {
+        "active": false,
+        "username": "superuser",
+        "password": "SYS",
+        "docker-compose": {
+            "service": "irisA"
+        },
+        "ns": "WEBINAR",
+        "port": 52773,
+        "host": "localhost"
+    }
+}

@@ -1,0 +1,1129 @@
+{
+	"info": {
+		"_postman_id": "0bb2f855-2d03-45a8-96b9-faccbbb60b1e",
+		"name": "Leaderboard API",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "GET Player",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:52773/leaderboard/api/v1/player/1",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52773",
+					"path": [
+						"leaderboard",
+						"api",
+						"v1",
+						"player",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GET Players",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:52773/leaderboard/api/v1/player",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52773",
+					"path": [
+						"leaderboard",
+						"api",
+						"v1",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "POST Player",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "81824ec8-b2da-4008-a8b6-8d631bda7393",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"Freddie Fred\",\n    \"Alias\": \"juliusErving33\",\n    \"Team\": {\n        \"Name\": \"Castlevanians\",\n        \"City\": \"Eternia\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:52773/leaderboard/api/v1/player",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52773",
+					"path": [
+						"leaderboard",
+						"api",
+						"v1",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "PUT Player",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "6b4242c6-95f0-465b-8091-77e61615972d",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"Name\": \"James Harden\",\n    \"Alias\": \"The Beard\",\n    \"Score\": 7474,\n    \"Team\": {\n    \t\"Name\": \"Rockets\",\n    \t\"City\": \"Houston\"\n    }\n}"
+				},
+				"url": {
+					"raw": "http://localhost:52773/leaderboard/api/v1/player/101",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "52773",
+					"path": [
+						"leaderboard",
+						"api",
+						"v1",
+						"player",
+						"101"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "iris-leaderboard-v1-service",
+							"type": "text"
+						},
+						{
+							"key": "url",
+							"value": "http://172.24.28.182:52773/leaderboard/api/v1",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Route",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "paths[]",
+							"value": "/leaderboard",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services/iris-leaderboard-v1-service/routes",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services",
+						"iris-leaderboard-v1-service",
+						"routes"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Auth in Service",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "key-auth",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/services/iris-leaderboard-v1-service/plugins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"services",
+						"iris-leaderboard-v1-service",
+						"plugins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Consumer SystemA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "systemA",
+							"type": "text"
+						},
+						{
+							"key": "custom_id",
+							"value": "SYSTEM_A",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Consumer webapp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "username",
+							"value": "webapp",
+							"type": "text"
+						},
+						{
+							"key": "custom_id",
+							"value": "WEB_APP",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Key SystemA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "systemAsecret",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers/systemA/key-auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers",
+						"systemA",
+						"key-auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Key webapp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "key",
+							"value": "webappsecret",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers/webapp/key-auth",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers",
+						"webapp",
+						"key-auth"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Config - Rate Limit webapp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/x-www-form-urlencoded"
+					}
+				],
+				"body": {
+					"mode": "urlencoded",
+					"urlencoded": [
+						{
+							"key": "name",
+							"value": "rate-limiting",
+							"type": "text"
+						},
+						{
+							"key": "config.minute",
+							"value": "500",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8001/consumers/webapp/plugins",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"consumers",
+						"webapp",
+						"plugins"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - GET Player - No auth",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/leaderboard/player/4",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leaderboard",
+						"player",
+						"4"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - GET Player - Consumer SystemA",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"type": "text",
+						"value": "systemAsecret"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/leaderboard/player/78",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leaderboard",
+						"player",
+						"78"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - GET Players - Consumer WebApp",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"value": "webappsecret",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/leaderboard/player",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leaderboard",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - GET Players - Developer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"type": "text",
+						"value": "9TIvhNj33MHc3FQX5RfM87XeMmtFgImL"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/leaderboard/player",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leaderboard",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - GET Players - LB",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"type": "text",
+						"value": "webappsecret"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/leaderboard-lb/player",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leaderboard-lb",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - GET Players - Route By Header",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"type": "text",
+						"value": "webappsecret"
+					},
+					{
+						"key": "version",
+						"value": "v2",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/leaderboard-header/player",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"leaderboard-header",
+						"player"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - Mock",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "apikey",
+						"type": "text",
+						"value": "webappsecret"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:8000/mock",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8000",
+					"path": [
+						"mock"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - OAuth2 Get Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "grant_type",
+							"value": "client_credentials",
+							"type": "text"
+						},
+						{
+							"key": "client_id",
+							"value": "hellowWorldApp",
+							"type": "text"
+						},
+						{
+							"key": "client_secret",
+							"value": "hellowWorldSecret",
+							"type": "text"
+						},
+						{
+							"key": "redirect_uri",
+							"value": "http://localhost:8000/",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "https://localhost:8443/mock2/oauth2/token",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"mock2",
+						"oauth2",
+						"token"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - OAuth2 Use Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Yv1uFjxeFnFmHdysETaEqcFm6JkuG5B7",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "https://localhost:8443/mock2",
+					"protocol": "https",
+					"host": [
+						"localhost"
+					],
+					"port": "8443",
+					"path": [
+						"mock2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - OAuth2 View Tokens",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8001/oauth2_tokens/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"oauth2_tokens",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "IAM - OAuth2 Remove Token",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"id": "21d86e73-910d-4b2d-9be6-93be6bcb4a3a",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "Yv1uFjxeFnFmHdysETaEqcFm6JkuG5B7",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": []
+				},
+				"url": {
+					"raw": "http://localhost:8001/oauth2_tokens/dac80f81-58e0-4246-ac92-cee811862369",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8001",
+					"path": [
+						"oauth2_tokens",
+						"dac80f81-58e0-4246-ac92-cee811862369"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "bbc3aa6f-109d-4617-ab8d-29b3aba21687",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "b5eece7c-29da-4f1d-8bb5-216f21a4822e",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
