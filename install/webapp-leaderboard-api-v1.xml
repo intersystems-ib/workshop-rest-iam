@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ApplicationsExport>
   <Applications>
-    <AutheEnabled>64</AutheEnabled>
+    <AutheEnabled>96</AutheEnabled>
     <AutoCompile>true</AutoCompile>
     <CookiePath>/leaderboard/api/v1/</CookiePath>
     <CSPZENEnabled>true</CSPZENEnabled>
