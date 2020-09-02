@@ -320,3 +320,79 @@ curl -s -X POST http://iam:8001/services/leaderboard-lb/routes \
     | jq
 ```
 * In Postman, test the `IAM - GET Players - LB` request. Pay attention to the `Node` property in the response body.
+
+## (h) API Manager: Route by Header Scenario
+You will now build a route by header scenario using three IRIS instances with the *leaderboard* REST API.
+
+This could be useful in case you want use different servers depending on request headers (e.g. different versions).
+
+*Tip:* open a VS Code Terminal session and type the following so you can send `curl` commands to IAM.
+```  
+docker exec -it tools sh
+```
+
+<img src="img/scenario-route-by-header.png">
+
+* Create Default, V1 and V2 **upstreams**
+
+```
+curl -s -X POST http://iam:8001/upstreams \
+    -d name=leaderboard-header-stream \
+    | jq
+```
+```
+curl -s -X POST http://iam:8001/upstreams \
+    -d name=leaderboard-header-v1-stream \
+    | jq
+```
+```
+curl -s -X POST http://iam:8001/upstreams \
+    -d name=leaderboard-header-v2-stream \
+    | jq
+```
+
+* Add **targets** to each IRIS instance
+
+```
+curl -s -X POST http://iam:8001/upstreams/leaderboard-header-stream/targets \
+    -d target=irisA:52773 \
+    | jq
+```
+```
+curl -s -X POST http://iam:8001/upstreams/leaderboard-header-v1-stream/targets \
+    -d target=irisB:52773 \
+    | jq
+```
+```
+curl -s -X POST http://iam:8001/upstreams/leaderboard-header-v2-stream/targets \
+    -d target=irisC:52773 \
+    | jq
+```
+
+* Add a **service** referencing the default upstream:
+
+```
+curl -s -X POST http://iam:8001/services/ \
+    --data 'name=leaderboard-header' \
+    --data 'host=leaderboard-header-stream' \
+    --data 'path=/leaderboard/api/v1' \
+    | jq
+```
+
+* Add a **route** to access your service:
+```
+curl -s -X POST http://iam:8001/services/leaderboard-header/routes \
+    --data 'paths[]=/leaderboard-header' \
+    | jq
+```
+
+* Add `route-by-header` plugin with some conditions on request header `version`:
+
+```
+curl -s -X POST http://iam:8001/services/leaderboard-header/plugins \
+    -H 'Content-Type: application/json' \
+    -d '{"name": "route-by-header", "config": {"rules":[{"condition": {"version":"v1"}, "upstream_name": "leaderboard-header-v1-stream"}, {"condition": {"version":"v2"}, "upstream_name": "leaderboard-header-v2-stream"}]}}' \
+    | jq
+```
+
+* In Postman, try the `IAM - GET Players - Route By Header` using different `version` header request values.
