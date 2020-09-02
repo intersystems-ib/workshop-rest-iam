@@ -38,7 +38,7 @@ ClassMethod getPlayers() As %DynamicObject
     			"Id": (rs.%Get("Id")),
     			"Name": (rs.%Get("Name")),
     			"Alias": (rs.%Get("Alias")),
-                "Node": "A"
+                "Node": ($system.INetInfo.LocalHostName())
     		})
     }
     

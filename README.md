@@ -263,3 +263,60 @@ curl -X POST http://iam:8001/consumers/webapp/plugins \
 * Logged as a developer, create your own API credential in `Create API Credential`.
 * In Postman, test `IAM - Get Players - Developer` replacing the `api-key` header by the actual credential you have just created.
 * Access the APIs documentation in `Documentation`.
+
+### Auditing
+* There are different ways of exposing the audit logs. For example if you have any online account with HTTP interface, you can configure a global http log plugin to push logs to your remote audit manager:
+```
+curl -X POST http://iam:8001/plugins/ \
+    --data "name=http-log" \
+    --data "config.http_endpoint=http://remote-audit-interface" \
+    | jq
+```
+
+## (h) API Manager: Load Balancing Scenario
+You will build a load balancing scenario between two IRIS instances with the *leaderboard* REST API.
+
+This can be useful in case you want to spread the workload, blue-green deployment, etc.
+
+*Tip:* open a VS Code Terminal session and type the following so you can send `curl` commands to IAM.
+```  
+docker exec -it tools sh
+```
+
+<img src="img/scenario-lb.png">
+
+* Create an **upstream**
+```
+curl -s -X POST http://iam:8001/upstreams \
+    -d name=leaderboard-lb-stream \
+    | jq
+```
+* Add the two IRIS instances **targets** to upstream
+
+```
+curl -s -X POST http://iam:8001/upstreams/leaderboard-lb-stream/targets \
+    -d target=irisA:52773 \
+    -d weight=500 \
+    | jq
+```
+```
+curl -s -X POST http://iam:8001/upstreams/leaderboard-lb-stream/targets \
+    -d target=irisB:52773 \
+    -d weight=500 \
+    | jq
+```
+* Add a **service** referencing the upstream
+```
+curl -s -X POST http://iam:8001/services/ \
+    --data 'name=leaderboard-lb' \
+    --data 'host=leaderboard-lb-stream' \
+    --data 'path=/leaderboard/api/v1' \
+    | jq
+```
+* Add a **route** to access the service
+```
+curl -s -X POST http://iam:8001/services/leaderboard-lb/routes \
+    --data 'paths[]=/leaderboard-lb' \
+    | jq
+```
+* In Postman, test the `IAM - GET Players - LB` request. Pay attention to the `Node` property in the response body.
