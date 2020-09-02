@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 
 while [ 1 ]
 do
     max=$(( ( RANDOM % 99 )  + 1 ))
-    curl -H "apikey:systemAsecret" -s "http://localhost:8000/leaderboard/player/[1-$max]" "http://localhost:8000/leaderboard/player?[1-$max]"
-    curl -H "apikey:webappsecret" -s "http://localhost:8000/leaderboard/player/[1-$max]" "http://localhost:8000/leaderboard/player?[1-$max]"
+    curl -H "apikey:systemAsecret" -s "http://iam:8000/leaderboard/player/[1-$max]" "http://iam:8000/leaderboard/player?[1-$max]"
+    curl -H "apikey:webappsecret" -s "http://iam:8000/leaderboard/player/[1-$max]" "http://iam:8000/leaderboard/player?[1-$max]"
     sleep .5
 done

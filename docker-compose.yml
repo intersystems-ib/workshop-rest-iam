@@ -1,7 +1,18 @@
 version: '3.2'
 
 services:
-  
+
+  # ==================
+  # command line tools
+  # ==================
+
+  tools:
+    build:
+      context: tools
+    container_name: tools
+    volumes:
+      - ./shared:/shared
+
   # ==================
   # InterSystems IRIS
   # ==================

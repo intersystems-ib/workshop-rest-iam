@@ -182,8 +182,84 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 }
 ```
 
-## (f) Test the API
+## (f). Test the API
 * Configure the automatically created web endpoint called `/leaderboard/api/v1` in [Web Applications](http://localhost:52773/csp/sys/sec/%25CSP.UI.Portal.Applications.WebList.zen). Set unauthenticated access and set `Webinar` temporal role.
 * Load in Postman the collection in [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json).
 * Try these requests: `GET Player`, `GET Players`, `POST Player` y `PUT Player`.
 
+
+## (g) API Manager: Basic Scenario
+Now, you will build a basic scenario to manage the REST API in InterSystems API Manager (IAM).
+
+Remember IAM can be managed using the UI or using the REST interface.
+
+*Tip:* open a VS Code Terminal session and type the following so you can send `curl` commands to IAM.
+```  
+docker exec -it tools sh
+```
+
+<img src="img/scenario-basic.png">
+
+### Add API to API Manager
+* Add a **service** to which will invoke the API in IRIS.
+```
+curl -i -X POST --url http://iam:8001/services/ \
+--data 'name=iris-leaderboard-v1-service' \
+--data 'url=http://irisA:52773/leaderboard/api/v1' | jq
+```
+* Add a **route** that will give access to the service you have just created.
+```
+curl -i -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+--data 'paths[]=/leaderboard' | jq
+```  
+* In Postman, test the `IAM - Get Player - No auth` request.
+* Add Authentication by setting up the `key-auth` plugin in the service. 
+```
+curl -X POST http://iam:8001/services/iris-leaderboard-v1-service/plugins \
+    --data "name=key-auth" | jq
+```
+* In Postman, test again the `IAM - Get Player - No auth` request.
+
+### Consumers
+* Create some consumers so you can authenticate to access the API.
+* Create consumer `systemA`
+```
+curl -d "username=systemA&custom_id=SYSTEM_A" http://iam:8001/consumers/ | jq
+```
+* Create secret for `systemA``
+```
+curl -X POST http://iam:8001/consumers/systemA/key-auth -d 'key=systemAsecret' | jq
+```
+* In Postman, test `IAM - GET Player. Consumer SystemA` request.
+* Create another consumer called `webapp`
+```
+curl -d "username=webapp&custom_id=WEB_APP" http://iam:8001/consumers/ | jq
+```
+* Create secret for `webapp`
+```
+curl -X POST http://iam:8001/consumers/webapp/key-auth -d 'key=webappsecret' | jq
+```
+* In Postman, test `IAM - GET Players - Consumer WebApp` request.
+
+### Rate Limiting
+* We can simulate some traffic using [shared/simulate.sh](shared/simulate.sh) script. In your *tools* container session type:
+```
+/shared/simulate.sh
+```
+* Add a restriction for `webapp` consumer. Limit it to 100 requests in a minute.
+```
+curl -X POST http://iam:8001/consumers/webapp/plugins \
+    --data "name=rate-limiting" \
+    --data "config.minute=100" | jq
+```
+
+### Developer Portal
+* Set up the Developer Portal in IAM so developers could sign up automatically.
+* Go to [IAM Portal](http://localhost:8002/default/dashboard) and `Dev Portal > Settings > Authentication Plugin=Basic, Auto Approve Access=Enable > Save Changes`
+* Publish the OpenAPI specs of the REST API you have just built in [Portal IAM](http://localhost:8002/default/dashboard) and  `Dev Portal > Specs > Add Spec > "leaderboard" > Add specs`
+
+### API credentials and developers
+* Go to the [Developer Portal](http://127.0.0.1:8003/default) and click `Sign Up`.
+* Logged as a developer, create your own API credential in `Create API Credential`.
+* In Postman, test `IAM - Get Players - Developer` replacing the `api-key` header by the actual credential you have just created.
+* Access the APIs documentation in `Documentation`.
