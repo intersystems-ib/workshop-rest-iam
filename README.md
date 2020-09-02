@@ -27,7 +27,7 @@ docker login -u="user" -p="token" containers.intersystems.com
 docker pull containers.intersystems.com/intersystems/iris:2020.2.0.211.0
 ```
 
-## IAM Image & License
+## IAM Image & License
 In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
 * Components > Download *IAM 0.34* image and then load it:
 ```
@@ -35,7 +35,7 @@ docker load -i iam_image.tar
 ```
 * Get your evaluation license with IAM enabled in *Evaluations*.
 
-## Build the image
+## Build the image
 Build the image we will use during the workshop:
 
 ```console
@@ -65,7 +65,6 @@ docker-compose up -d
 * Notice that both classes inherit from `%Persistent` and `%JSON.Adaptor`.
 * If you are not familiar with `%JSON.Adaptor` and transforming objects to and from JSON, check this great article [JSON Enhancements](https://community.intersystems.com/post/json-enhancements) on Developer Community.
 * Check also the generated data through *System Explorer > SQL*.
-
 
 ## (d). Generate API from OpenAPI specifications
 * Let's build the API implementation skeleton from the OpenAPI specification using `^%REST` wizard.
@@ -98,7 +97,7 @@ Web application name: /leaderboard/api/v1
 Application Webinar.API.Leaderboard.v1 deployed to /leaderboard/api/v1
 ```
 
-## (e) Implement REST API methods
+## (e). Implement REST API methods
 * Using VS Code, complete the code of the following methods in `Webinar.API.Leaderboard.v1.impl`.
 
 ### addPlayer
@@ -188,7 +187,7 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 * Try these requests: `GET Player`, `GET Players`, `POST Player` y `PUT Player`.
 
 
-## (g) API Manager: Basic Scenario
+## (g). API Manager: Basic Scenario
 Now, you will build a basic scenario to manage the REST API in InterSystems API Manager (IAM).
 
 Remember IAM can be managed using the UI or using the REST interface.
@@ -273,7 +272,7 @@ curl -X POST http://iam:8001/plugins/ \
     | jq
 ```
 
-## (h) API Manager: Load Balancing Scenario
+## (h). API Manager: Load Balancing Scenario
 You will build a load balancing scenario between two IRIS instances with the *leaderboard* REST API.
 
 This can be useful in case you want to spread the workload, blue-green deployment, etc.
@@ -321,7 +320,7 @@ curl -s -X POST http://iam:8001/services/leaderboard-lb/routes \
 ```
 * In Postman, test the `IAM - GET Players - LB` request. Pay attention to the `Node` property in the response body.
 
-## (h) API Manager: Route by Header Scenario
+## (i). API Manager: Route by Header Scenario
 You will now build a route by header scenario using three IRIS instances with the *leaderboard* REST API.
 
 This could be useful in case you want use different servers depending on request headers (e.g. different versions).
