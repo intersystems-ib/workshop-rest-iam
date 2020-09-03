@@ -49,7 +49,7 @@ $ docker-compose build
 ## (a). Run containers and access IAM
 * Run the containers we will use in the workshop and check you access them:
 ```
-docker-compose up -d
+docker-compose up
 ```
 * Access [IRIS Management Portal](http://localhost:52773/csp/sys/UtilHome.csp) using `superuser`/`SYS`.
 * Access [IAM Management Portal](http://localhost:8002/overview).
