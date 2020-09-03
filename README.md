@@ -27,13 +27,18 @@ docker login -u="user" -p="token" containers.intersystems.com
 docker pull containers.intersystems.com/intersystems/iris:2020.2.0.211.0
 ```
 
-## IAM Image & License
+## IAM Image
 In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
-* Components > Download *IAM 0.34* image and then load it:
+* Components > Download *IAM-0.34-1-1.tar.gz* file, unzip & untar and then load the image:
 ```
 docker load -i iam_image.tar
 ```
-* Get your evaluation license with IAM enabled in *Evaluations*.
+
+## IAM enabled IRIS license
+In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
+* Preview > Download *InterSystems IRIS IAM Preview (Docker)* license.
+
+**IMPORTANT** Place the downloaded license into the workshop root and rename it to `iris.key`.
 
 ## Build the image
 Build the image we will use during the workshop:
