@@ -207,20 +207,20 @@ docker exec -it tools sh
 ### Add API to API Manager
 * Add a **service** to which will invoke the API in IRIS.
 ```
-curl -i -X POST --url http://iam:8001/services/ \
+curl -X POST --url http://iam:8001/services/ \
 --data 'name=iris-leaderboard-v1-service' \
 --data 'url=http://irisA:52773/leaderboard/api/v1' | jq
 ```
 * Add a **route** that will give access to the service you have just created.
 ```
-curl -i -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
 --data 'paths[]=/leaderboard' | jq
 ```  
 * In Postman, test the `IAM - Get Player - No auth` request.
 * Add Authentication by setting up the `key-auth` plugin in the service. 
 ```
 curl -X POST http://iam:8001/services/iris-leaderboard-v1-service/plugins \
-    --data "name=key-auth" | jq
+--data "name=key-auth" | jq
 ```
 * In Postman, test again the `IAM - Get Player - No auth` request.
 
