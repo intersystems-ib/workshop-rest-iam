@@ -136,7 +136,8 @@ ClassMethod getPlayers() As %DynamicObject
     		{
     			"Id": (rs.%Get("Id")),
     			"Name": (rs.%Get("Name")),
-    			"Alias": (rs.%Get("Alias"))
+    			"Alias": (rs.%Get("Alias")),
+                "Node": ($system.INetInfo.LocalHostName())
     		})
     }
     
@@ -191,8 +192,55 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 * Load in Postman the collection in [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json).
 * Try these requests: `GET Player`, `GET Players`, `POST Player` y `PUT Player`.
 
+## (g). Make your REST API part of an interoperability production (optional)
 
-## (g). API Manager: Basic Scenario
+### Create production and add a dummy BO
+* Using the [Management Portal](http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen?$NAMESPACE=WEBINAR) *Interoperability > List > Productions > New*, create a new production called `Webinar.Production`.
+* Click on `Production Settings` and in *Settings* tab make sure `Testing enabled` is checked.
+* Let's create a simple Business Operation that you will use to request some information you will include in your REST API response. This component sends a REST message to an external dummy service and returns a value. Have a look at the source code [src/Webinar/BO/DummyREST.cls](src/Webinar/BO/DummyREST.cls)
+* Add a new Business Operation in your production, choose `Webinar.BO.DummyREST`. Then, in the *Settings* tab configure:
+  * *HTTP Server:* `mockbin.com`
+  * *URL:* `/request`
+* Test the Business Operation in the *Actions* tab clicking on the Test button.
+
+### Make your REST API a Business Service
+* In VS Code, open your REST API implementation [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls).
+* Update the class to extends from `(%REST.Impl, Ens.BusinessService)`. Now, you have turned your REST API into a Business Service.
+* In the [Webinar.Production](http://localhost:52773/csp/webinar/EnsPortal.ProductionConfig.zen?PRODUCTION=Webinar.Production) production configuration page, add a new Business Service and select `Webinar.API.Leaderboard.v1.impl`. Keep it disabled.
+* Back in VS Code, change the [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` implementation:
+```
+ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
+{
+    set player = ##class(Webinar.Data.Player).%OpenId(playerId)
+    if '$isobject(player) {
+    	do ..%SetStatusCode(404)
+    	quit ""
+    }
+
+    // instantiate Business Service (interoperability framework)
+    set sc = ##class(Ens.Director).CreateBusinessService("Webinar.API.Leaderboard.v1.impl",.service)
+    $$$ThrowOnError(sc)
+
+    // build request message
+    set req = ##class(Ens.StringContainer).%New()
+    set req.StringValue = playerId
+        
+    // send message to Business Operation
+    set sc = service.SendRequestSync("Webinar.BO.DummyREST", req, .rsp)
+    $$$ThrowOnError(sc)
+
+    // concatenate Business Operation response to REST API response
+    set player.Name = player.Name_"("_rsp.StringValue_")"
+
+    do player.%JSONExportToStream(.stream)
+    quit stream
+}
+```
+* Enable the `Webinar.API.Leaderboard.v1.impl` Business Service in production configuration page.
+* In Postman, test the `GET Player` request and check [Message Viewer](http://localhost:52773/csp/webinar/EnsPortal.MessageViewer.zen?SOURCEORTARGET=Webinar.API.Leaderboard.v1.impl) messages and visual trace.
+
+
+## (h). API Manager: Basic Scenario
 Now, you will build a basic scenario to manage the REST API in InterSystems API Manager (IAM).
 
 Remember IAM can be managed using the UI or using the REST interface.
@@ -277,7 +325,7 @@ curl -X POST http://iam:8001/plugins/ \
     | jq
 ```
 
-## (h). API Manager: Load Balancing Scenario
+## (i). API Manager: Load Balancing Scenario
 You will build a load balancing scenario between two IRIS instances with the *leaderboard* REST API.
 
 This can be useful in case you want to spread the workload, blue-green deployment, etc.
@@ -325,7 +373,7 @@ curl -s -X POST http://iam:8001/services/leaderboard-lb/routes \
 ```
 * In Postman, test the `IAM - GET Players - LB` request. Pay attention to the `Node` property in the response body.
 
-## (i). API Manager: Route by Header Scenario
+## (j). API Manager: Route by Header Scenario
 You will now build a route by header scenario using three IRIS instances with the *leaderboard* REST API.
 
 This could be useful in case you want use different servers depending on request headers (e.g. different versions).
@@ -400,3 +448,7 @@ curl -s -X POST http://iam:8001/services/leaderboard-header/plugins \
 ```
 
 * In Postman, try the `IAM - GET Players - Route By Header` using different `version` header request values.
+
+# Explore other scenarios
+Have a look at this example where you can see in action a REST API in IRIS as backend for an Angular application:
+https://github.com/intersystems-ib/iris-sample-rest-angular
