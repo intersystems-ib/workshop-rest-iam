@@ -36,7 +36,7 @@ docker load -i iam_image.tar
 
 ## IAM enabled IRIS license
 In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
-* Preview > Download *InterSystems IRIS IAM Preview (Docker)* license.
+* Preview > Download *InterSystems IRIS IAM Preview* license for Docker.
 
 **IMPORTANT** Place the downloaded license into the workshop root and rename it to `iris.key`.
 
