@@ -19,18 +19,18 @@ Have a look at this [Introducing InterSystems Container Registry](https://commun
 
 * Log-in into https://containers.intersystems.com/ using your WRC credentials and get a *token*.
 * Set up docker login in your computer:
-```
+```bash
 docker login -u="user" -p="token" containers.intersystems.com
 ```
 * Get InterSystems IRIS image:
-```
+```bash
 docker pull containers.intersystems.com/intersystems/iris:2020.2.0.211.0
 ```
 
 ## IAM Image
 In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
 * Components > Download *IAM-0.34-1-1.tar.gz* file, unzip & untar and then load the image:
-```
+```bash
 docker load -i iam_image.tar
 ```
 
@@ -43,7 +43,7 @@ In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.c
 ## Build the image
 Build the image we will use during the workshop:
 
-```console
+```consbashole
 $ git clone https://github.com/intersystems-ib/workshop-rest-iam
 $ cd workshop-rest-iam
 $ docker-compose build
@@ -53,7 +53,7 @@ $ docker-compose build
 
 ## (a). Run containers and access IAM
 * Run the containers we will use in the workshop and check you access them:
-```
+```bash
 docker-compose up
 ```
 * Access [IRIS Management Portal](http://localhost:52773/csp/sys/UtilHome.csp) using `superuser`/`SYS`.
@@ -74,7 +74,7 @@ docker-compose up
 ## (d). Generate API from OpenAPI specifications
 * Let's build the API implementation skeleton from the OpenAPI specification using `^%REST` wizard.
 * Open a WebTerminal session using http://localhost:52773/terminal/ and type: 
-```
+```console
 WEBINAR > do ^%REST 
 REST Command Line Interface (CLI) helps you CREATE or DELETE a REST application.Enter an application name or (L)ist all REST applications (L): L 
 Applications        Web Applications
@@ -106,7 +106,7 @@ Application Webinar.API.Leaderboard.v1 deployed to /leaderboard/api/v1
 * Using VS Code, complete the code of the following methods in `Webinar.API.Leaderboard.v1.impl`.
 
 ### addPlayer
-```
+```objectscript
 ClassMethod addPlayer(body As %DynamicObject) As %DynamicObject
 {
     set player = ##class(Webinar.Data.Player).%New()
@@ -122,7 +122,7 @@ ClassMethod addPlayer(body As %DynamicObject) As %DynamicObject
 ```
 
 ### getPlayers
-```
+```objectscript
 ClassMethod getPlayers() As %DynamicObject
 {
     set sql = "SELECT Id, Name, Alias FROM Webinar_Data.Player order by Score"
@@ -146,7 +146,7 @@ ClassMethod getPlayers() As %DynamicObject
 ```
 
 ### getPlayerById
-```
+```objectscript
 ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 {
     set player = ##class(Webinar.Data.Player).%OpenId(playerId)
@@ -160,7 +160,7 @@ ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 ```
 
 ### updatePlayer
-```
+```objectscript
 ClassMethod updatePlayer(playerId As %Integer, body As %DynamicObject) As %DynamicObject
 {
     set player = ##class(Webinar.Data.Player).%OpenId(playerId)
@@ -176,7 +176,7 @@ ClassMethod updatePlayer(playerId As %Integer, body As %DynamicObject) As %Dynam
 ```
 
 ### deletePlayer
-```
+```objectscript
 ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 {
     set sc = ##class(Webinar.Data.Player).%DeleteId(playerId)
@@ -208,7 +208,7 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 * Update the class to extends from `(%REST.Impl, Ens.BusinessService)`. Now, you have turned your REST API into a Business Service.
 * In the [Webinar.Production](http://localhost:52773/csp/webinar/EnsPortal.ProductionConfig.zen?PRODUCTION=Webinar.Production) production configuration page, add a new Business Service and select `Webinar.API.Leaderboard.v1.impl`. Keep it disabled.
 * Back in VS Code, change the [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` implementation:
-```
+```objectscript
 ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 {
     set player = ##class(Webinar.Data.Player).%OpenId(playerId)
@@ -246,7 +246,7 @@ Now, you will build a basic scenario to manage the REST API in InterSystems API 
 Remember IAM can be managed using the UI or using the REST interface.
 
 *Tip:* open a VS Code Terminal session and type the following so you can send `curl` commands to IAM.
-```  
+```bash  
 docker exec -it tools sh
 ```
 
@@ -254,19 +254,19 @@ docker exec -it tools sh
 
 ### Add API to API Manager
 * Add a **service** to which will invoke the API in IRIS.
-```
+```bash
 curl -X POST --url http://iam:8001/services/ \
 --data 'name=iris-leaderboard-v1-service' \
 --data 'url=http://irisA:52773/leaderboard/api/v1' | jq
 ```
 * Add a **route** that will give access to the service you have just created.
-```
+```bash
 curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
 --data 'paths[]=/leaderboard' | jq
 ```  
 * In Postman, test the `IAM - Get Player - No auth` request.
 * Add Authentication by setting up the `key-auth` plugin in the service. 
-```
+```bash
 curl -X POST http://iam:8001/services/iris-leaderboard-v1-service/plugins \
 --data "name=key-auth" | jq
 ```
@@ -275,27 +275,27 @@ curl -X POST http://iam:8001/services/iris-leaderboard-v1-service/plugins \
 ### Consumers
 * Create some consumers so you can authenticate to access the API.
 * Create consumer `systemA`
-```
+```bash
 curl -d "username=systemA&custom_id=SYSTEM_A" http://iam:8001/consumers/ | jq
 ```
 * Create secret for `systemA``
-```
+```bash
 curl -X POST http://iam:8001/consumers/systemA/key-auth -d 'key=systemAsecret' | jq
 ```
 * In Postman, test `IAM - GET Player. Consumer SystemA` request.
 * Create another consumer called `webapp`
-```
+```bash
 curl -d "username=webapp&custom_id=WEB_APP" http://iam:8001/consumers/ | jq
 ```
 * Create secret for `webapp`
-```
+```bash
 curl -X POST http://iam:8001/consumers/webapp/key-auth -d 'key=webappsecret' | jq
 ```
 * In Postman, test `IAM - GET Players - Consumer WebApp` request.
 
 ### Rate Limiting
 * We can simulate some traffic using [shared/simulate.sh](shared/simulate.sh) script. In your *tools* container session type:
-```
+```bash
 /shared/simulate.sh
 ```
 * Add a restriction for `webapp` consumer. Limit it to 100 requests in a minute.
@@ -318,7 +318,7 @@ curl -X POST http://iam:8001/consumers/webapp/plugins \
 
 ### Auditing
 * There are different ways of exposing the audit logs. For example if you have any online account with HTTP interface, you can configure a global http log plugin to push logs to your remote audit manager:
-```
+```bash
 curl -X POST http://iam:8001/plugins/ \
     --data "name=http-log" \
     --data "config.http_endpoint=http://remote-audit-interface" \
@@ -331,34 +331,34 @@ You will build a load balancing scenario between two IRIS instances with the *le
 This can be useful in case you want to spread the workload, blue-green deployment, etc.
 
 *Tip:* open a VS Code Terminal session and type the following so you can send `curl` commands to IAM.
-```  
+```bash
 docker exec -it tools sh
 ```
 
 <img src="img/scenario-lb.png">
 
 * Create an **upstream**
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams \
     -d name=leaderboard-lb-stream \
     | jq
 ```
 * Add the two IRIS instances **targets** to upstream
 
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams/leaderboard-lb-stream/targets \
     -d target=irisA:52773 \
     -d weight=500 \
     | jq
 ```
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams/leaderboard-lb-stream/targets \
     -d target=irisB:52773 \
     -d weight=500 \
     | jq
 ```
 * Add a **service** referencing the upstream
-```
+```bash
 curl -s -X POST http://iam:8001/services/ \
     --data 'name=leaderboard-lb' \
     --data 'host=leaderboard-lb-stream' \
@@ -366,7 +366,7 @@ curl -s -X POST http://iam:8001/services/ \
     | jq
 ```
 * Add a **route** to access the service
-```
+```bash
 curl -s -X POST http://iam:8001/services/leaderboard-lb/routes \
     --data 'paths[]=/leaderboard-lb' \
     | jq
@@ -379,7 +379,7 @@ You will now build a route by header scenario using three IRIS instances with th
 This could be useful in case you want use different servers depending on request headers (e.g. different versions).
 
 *Tip:* open a VS Code Terminal session and type the following so you can send `curl` commands to IAM.
-```  
+``` bash
 docker exec -it tools sh
 ```
 
@@ -387,17 +387,17 @@ docker exec -it tools sh
 
 * Create Default, V1 and V2 **upstreams**
 
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams \
     -d name=leaderboard-header-stream \
     | jq
 ```
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams \
     -d name=leaderboard-header-v1-stream \
     | jq
 ```
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams \
     -d name=leaderboard-header-v2-stream \
     | jq
@@ -405,17 +405,17 @@ curl -s -X POST http://iam:8001/upstreams \
 
 * Add **targets** to each IRIS instance
 
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams/leaderboard-header-stream/targets \
     -d target=irisA:52773 \
     | jq
 ```
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams/leaderboard-header-v1-stream/targets \
     -d target=irisB:52773 \
     | jq
 ```
-```
+```bash
 curl -s -X POST http://iam:8001/upstreams/leaderboard-header-v2-stream/targets \
     -d target=irisC:52773 \
     | jq
@@ -423,7 +423,7 @@ curl -s -X POST http://iam:8001/upstreams/leaderboard-header-v2-stream/targets \
 
 * Add a **service** referencing the default upstream:
 
-```
+```bash
 curl -s -X POST http://iam:8001/services/ \
     --data 'name=leaderboard-header' \
     --data 'host=leaderboard-header-stream' \
@@ -432,7 +432,7 @@ curl -s -X POST http://iam:8001/services/ \
 ```
 
 * Add a **route** to access your service:
-```
+```bash
 curl -s -X POST http://iam:8001/services/leaderboard-header/routes \
     --data 'paths[]=/leaderboard-header' \
     | jq
@@ -440,7 +440,7 @@ curl -s -X POST http://iam:8001/services/leaderboard-header/routes \
 
 * Add `route-by-header` plugin with some conditions on request header `version`:
 
-```
+```bash
 curl -s -X POST http://iam:8001/services/leaderboard-header/plugins \
     -H 'Content-Type: application/json' \
     -d '{"name": "route-by-header", "config": {"rules":[{"condition": {"version":"v1"}, "upstream_name": "leaderboard-header-v1-stream"}, {"condition": {"version":"v2"}, "upstream_name": "leaderboard-header-v2-stream"}]}}' \
