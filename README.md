@@ -38,12 +38,12 @@ docker load -i iam_image.tar
 In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
 * Preview > Download *InterSystems IRIS IAM Preview* license for Docker.
 
-**IMPORTANT** Place the downloaded license into the workshop root and rename it to `iris.key`.
+**IMPORTANT!** Place the downloaded license into the workshop root and rename it to `iris.key`.
 
 ## Build the image
 Build the image we will use during the workshop:
 
-```consbashole
+```console
 $ git clone https://github.com/intersystems-ib/workshop-rest-iam
 $ cd workshop-rest-iam
 $ docker-compose build
@@ -194,6 +194,8 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 
 ## (g). Make your REST API part of an interoperability production (optional)
 
+You'll plug the API implementation into a production, so you could use any feature of interoperability productions withing a REST API implementation.
+
 ### Create production and add a dummy BO
 * Using the [Management Portal](http://localhost:52773/csp/sys/%25CSP.Portal.Home.zen?$NAMESPACE=WEBINAR) *Interoperability > List > Productions > New*, create a new production called `Webinar.Production`.
 * Click on `Production Settings` and in *Settings* tab make sure `Testing enabled` is checked.
@@ -238,6 +240,7 @@ ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 ```
 * Enable the `Webinar.API.Leaderboard.v1.impl` Business Service in production configuration page.
 * In Postman, test the `GET Player` request and check [Message Viewer](http://localhost:52773/csp/webinar/EnsPortal.MessageViewer.zen?SOURCEORTARGET=Webinar.API.Leaderboard.v1.impl) messages and visual trace.
+* Stop the production and revert the changes on [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` to continue. Test again the `GET Player` request to continue.
 
 
 ## (h). API Manager: Basic Scenario
@@ -293,22 +296,23 @@ curl -X POST http://iam:8001/consumers/webapp/key-auth -d 'key=webappsecret' | j
 ```
 * In Postman, test `IAM - GET Players - Consumer WebApp` request.
 
-### Rate Limiting
+### Rate Limiting 
 * We can simulate some traffic using [shared/simulate.sh](shared/simulate.sh) script. In your *tools* container session type:
 ```bash
 /shared/simulate.sh
 ```
 * Add a restriction for `webapp` consumer. Limit it to 100 requests in a minute.
-```
+```bash
 curl -X POST http://iam:8001/consumers/webapp/plugins \
     --data "name=rate-limiting" \
     --data "config.minute=100" | jq
 ```
+* Remove the restriction using the IAM Portal so you can continue.
 
 ### Developer Portal
 * Set up the Developer Portal in IAM so developers could sign up automatically.
 * Go to [IAM Portal](http://localhost:8002/default/dashboard) and `Dev Portal > Settings > Authentication Plugin=Basic, Auto Approve Access=Enable > Save Changes`
-* Publish the OpenAPI specs of the REST API you have just built in [Portal IAM](http://localhost:8002/default/dashboard) and  `Dev Portal > Specs > Add Spec > "leaderboard" > Add specs`
+* Publish the OpenAPI specs of the REST API you have just built in [IAM Portal](http://localhost:8002/default/dashboard) and  `Dev Portal > Specs > Add Spec > "leaderboard" > Add specs`
 
 ### API credentials and developers
 * Go to the [Developer Portal](http://127.0.0.1:8003/default) and click `Sign Up`.
