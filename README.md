@@ -137,7 +137,7 @@ ClassMethod getPlayers() As %DynamicObject
     			"Id": (rs.%Get("Id")),
     			"Name": (rs.%Get("Name")),
     			"Alias": (rs.%Get("Alias")),
-                "Node": ($system.INetInfo.LocalHostName())
+    			"Node": ($system.INetInfo.LocalHostName())
     		})
     }
     
@@ -189,7 +189,7 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 
 ## (f). Test the API
 * Configure the automatically created web endpoint called `/leaderboard/api/v1` in [Web Applications](http://localhost:52773/csp/sys/sec/%25CSP.UI.Portal.Applications.WebList.zen). Set unauthenticated access and set `Webinar` temporal role.
-* Load in Postman the collection in [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json).
+* In Postman, import [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json) collection.
 * Try these requests: `GET Player`, `GET Players`, `POST Player` y `PUT Player`.
 
 ## (g). Make your REST API part of an interoperability production (optional)
@@ -240,7 +240,7 @@ ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 ```
 * Enable the `Webinar.API.Leaderboard.v1.impl` Business Service in production configuration page.
 * In Postman, test the `GET Player` request and check [Message Viewer](http://localhost:52773/csp/webinar/EnsPortal.MessageViewer.zen?SOURCEORTARGET=Webinar.API.Leaderboard.v1.impl) messages and visual trace.
-* Stop the production and revert the changes on [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` to continue. Test again the `GET Player` request to continue.
+* **IMPORTANT!** In order to continue the next sections, stop the production and revert the changes on [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` to continue. Test again the `GET Player` request in Postman and check it's OK.
 
 
 ## (h). API Manager: Basic Scenario
