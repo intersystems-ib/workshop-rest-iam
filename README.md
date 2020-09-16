@@ -137,7 +137,7 @@ ClassMethod getPlayers() As %DynamicObject
     			"Id": (rs.%Get("Id")),
     			"Name": (rs.%Get("Name")),
     			"Alias": (rs.%Get("Alias")),
-                "Node": ($system.INetInfo.LocalHostName())
+    			"Node": ($system.INetInfo.LocalHostName())
     		})
     }
     
@@ -189,7 +189,7 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 
 ## (f). Test the API
 * Configure the automatically created web endpoint called `/leaderboard/api/v1` in [Web Applications](http://localhost:52773/csp/sys/sec/%25CSP.UI.Portal.Applications.WebList.zen). Set unauthenticated access and set `Webinar` temporal role.
-* Load in Postman the collection in [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json).
+* In Postman, import [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json) collection.
 * Try these requests: `GET Player`, `GET Players`, `POST Player` y `PUT Player`.
 
 ## (g). Make your REST API part of an interoperability production (optional)
