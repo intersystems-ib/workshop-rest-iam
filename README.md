@@ -240,7 +240,7 @@ ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 ```
 * Enable the `Webinar.API.Leaderboard.v1.impl` Business Service in production configuration page.
 * In Postman, test the `GET Player` request and check [Message Viewer](http://localhost:52773/csp/webinar/EnsPortal.MessageViewer.zen?SOURCEORTARGET=Webinar.API.Leaderboard.v1.impl) messages and visual trace.
-* Stop the production and revert the changes on [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` to continue. Test again the `GET Player` request to continue.
+* **IMPORTANT!** In order to continue the next sections, stop the production and revert the changes on [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` to continue. Test again the `GET Player` request in Postman and check it's OK.
 
 
 ## (h). API Manager: Basic Scenario
