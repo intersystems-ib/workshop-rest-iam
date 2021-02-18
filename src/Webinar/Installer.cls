@@ -32,6 +32,9 @@ XData Install [ XMLNamespace = INSTALLER ]
             <Invoke Class="Security.Applications" Method="Import" CheckStatus="true">
                 <Arg Value="/opt/webinar/install/webapp-iam.xml"/>
             </Invoke>
+            <Invoke Class="Security.Applications" Method="Import" CheckStatus="true">
+                <Arg Value="/opt/webinar/install/webapp-audit.xml"/>
+            </Invoke>
         </Namespace>
     </Manifest>
 }

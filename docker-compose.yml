@@ -59,13 +59,12 @@ services:
     - ./iris.key:/usr/irissys/mgr/iris.key
     - ./shared:/shared
 
-  
   # ===================================
-  # IAM - InterSystems API Manager 0.34
+  # IAM - InterSystems API Manager 1.5
   # ===================================
   iam-migrations:
     image: "${ISC_IAM_IMAGE}"
-    command: kong migrations up
+    command: kong migrations bootstrap
     depends_on:
       - db
     environment:
@@ -76,6 +75,7 @@ services:
       KONG_PG_USER: ${KONG_PG_USER:-iam}
       KONG_CASSANDRA_CONTACT_POINTS: db
       ISC_IRIS_URL: "${ISC_IRIS_URL}"
+      ISC_CA_CERT: "${ISC_CA_CERT}"
     restart: on-failure
     links:
       - db:db
@@ -100,7 +100,9 @@ services:
       KONG_PORTAL: 'on'
       KONG_PORTAL_GUI_PROTOCOL: http
       KONG_PORTAL_GUI_HOST: '127.0.0.1:8003'
+      KONG_ADMIN_GUI_URL: http://localhost:8002
       ISC_IRIS_URL: "${ISC_IRIS_URL}"
+      ISC_CA_CERT: "${ISC_CA_CERT}"
     links:
       - db:db
     ports:
@@ -130,7 +132,7 @@ services:
         protocol: tcp
     restart: on-failure
   db:
-    image: postgres:latest
+    image: postgres:9.6
     environment:
       POSTGRES_DB: ${KONG_PG_DATABASE:-iam}
       POSTGRES_PASSWORD: ${KONG_PG_PASSWORD:-iam}
