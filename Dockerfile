@@ -14,7 +14,7 @@ COPY src /opt/webinar/src/
 # include API implementation (or not)
 WORKDIR /opt/webinar/
 RUN echo "${WEBINAR_INCLUDE_API}"
-RUN if [ "${WEBINAR_INCLUDE_API}" = "no" ]; then rm -rf src/Webinar/API; fi
+RUN if [ "${WEBINAR_INCLUDE_API}" = "no" ]; then rm -rf src/Webinar/API/Leaderboard; fi
 
 # change permissions to IRIS user
 RUN chown -R ${ISC_PACKAGE_MGRUSER}:${ISC_PACKAGE_IRISGROUP} /opt/webinar

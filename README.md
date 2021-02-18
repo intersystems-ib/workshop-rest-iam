@@ -9,6 +9,7 @@ You can find more in-depth information in https://learning.intersystems.com.
 * [Docker Compose](https://docs.docker.com/compose/install/)
 * [Visual Studio Code](https://code.visualstudio.com/download) + [InterSystems ObjectScript VSCode Extension](https://marketplace.visualstudio.com/items?itemName=daimor.vscode-objectscript)
 * [Postman](https://www.getpostman.com/downloads/)
+* InterSystems IRIS IAM enabled license file.
 
 # Setup
 
@@ -29,16 +30,13 @@ docker pull containers.intersystems.com/intersystems/iris:2020.2.0.211.0
 
 ## IAM Image
 In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
-* Components > Download *IAM-0.34-1-1.tar.gz* file, unzip & untar and then load the image:
+* Components > Download *IAM-1.5.0.9-4.tar.gz* file, unzip & untar and then load the image:
 ```bash
 docker load -i iam_image.tar
 ```
 
 ## IAM enabled IRIS license
-In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
-* Preview > Download *InterSystems IRIS IAM Preview* license for Docker.
-
-**IMPORTANT!** Place the downloaded license into the workshop root and rename it to `iris.key`.
+**IMPORTANT!** Copy your InterSystems IRIS IAM enabled license file into the workshop root and rename it to `iris.key`.
 
 ## Build the image
 Build the image we will use during the workshop:
@@ -311,8 +309,22 @@ curl -X POST http://iam:8001/consumers/webapp/plugins \
 
 ### Developer Portal
 * Set up the Developer Portal in IAM so developers could sign up automatically.
-* Go to [IAM Portal](http://localhost:8002/default/dashboard) and `Dev Portal > Settings > Authentication Plugin=Basic, Auto Approve Access=Enable > Save Changes`
-* Publish the OpenAPI specs of the REST API you have just built in [IAM Portal](http://localhost:8002/default/dashboard) and  `Dev Portal > Specs > Add Spec > "leaderboard" > Add specs`
+* Go to [IAM Portal](http://localhost:8002/default/dashboard) and `Dev Portal > Settings`:
+* Set `Authentication Plugin=Basic`
+* Set `Auto Approve Access=Enable`
+* Set `Session Config (JSON)=Custom` and enter:
+```
+{
+    "cookie_name": "portal_session",
+    "secret": "CHANGE_THIS",
+    "storage": "kong",
+    "cookie_secure": false
+}
+``` 
+* Save Changes
+* Publish the OpenAPI specs of the REST API you have just built in [IAM Portal](http://localhost:8002/default/dashboard) and  `Dev Portal > Editor`
+* Click on `New File +` and set `File Type=spec` and `File Path=leaderboard.yaml`.
+* Copy the content of [leaderboard-api-v1.yaml](shared/leaderboard-api-v1.yaml). 
 
 ### API credentials and developers
 * Go to the [Developer Portal](http://127.0.0.1:8003/default) and click `Sign Up`.
@@ -321,13 +333,16 @@ curl -X POST http://iam:8001/consumers/webapp/plugins \
 * Access the APIs documentation in `Documentation`.
 
 ### Auditing
-* There are different ways of exposing the audit logs. For example if you have any online account with HTTP interface, you can configure a global http log plugin to push logs to your remote audit manager:
+* There are different ways of exposing the audit logs. For instance, you can configure a global http log plugin to push logs to your remote audit interface.
+* In this case you can use a very simple REST audit interface that will audit IAM requests into `shared/audit.json` file.
 ```bash
 curl -X POST http://iam:8001/plugins/ \
     --data "name=http-log" \
-    --data "config.http_endpoint=http://remote-audit-interface" \
+    --data "config.http_endpoint=http://irisA:52773/audit/log" \
     | jq
 ```
+* Try again some IAM requests in Postman and check the audit file.
+
 
 ## (i). API Manager: Load Balancing Scenario
 You will build a load balancing scenario between two IRIS instances with the *leaderboard* REST API.
