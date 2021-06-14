@@ -9,6 +9,9 @@
         },
         "ns": "WEBINAR",
         "port": 52773,
-        "host": "localhost"
+        "host": "localhost",
+        "links": {
+            "$(terminal) WebTerminal": "${serverUrl}/terminal/?ns=${ns}${serverAuth}"
+        }
     }
 }
