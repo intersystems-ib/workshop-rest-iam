@@ -59,9 +59,9 @@ services:
     - ./iris.key:/usr/irissys/mgr/iris.key
     - ./shared:/shared
 
-  # ===================================
-  # IAM - InterSystems API Manager 1.5
-  # ===================================
+  # ====================================
+  # IAM - InterSystems API Manager 2.3.3
+  # ====================================
   iam-migrations:
     image: "${ISC_IAM_IMAGE}"
     command: kong migrations bootstrap
@@ -146,6 +146,5 @@ services:
       retries: 3
     restart: on-failure
     stdin_open: true
-    tty: true
 volumes:
   pgdata:
