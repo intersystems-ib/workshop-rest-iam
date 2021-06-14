@@ -13,7 +13,7 @@ You can find more in-depth information in https://learning.intersystems.com.
 
 # Setup
 
-## IRIS image
+## Get InterSystems IRIS & IAM image
 You need to setup your access to InterSystems Container Registry to download IRIS limited access images.
 
 Have a look at this [Introducing InterSystems Container Registry](https://community.intersystems.com/post/introducing-intersystems-container-registry) on [Developer Community](https://community.intersystems.com).
@@ -23,16 +23,10 @@ Have a look at this [Introducing InterSystems Container Registry](https://commun
 ```bash
 docker login -u="user" -p="token" containers.intersystems.com
 ```
-* Get InterSystems IRIS image:
+* Download images:
 ```bash
-docker pull containers.intersystems.com/intersystems/iris:2020.2.0.211.0
-```
-
-## IAM Image
-In [WRC Software Distribution](https://wrc.intersystems.com/wrc/coDistribution.csp):
-* Components > Download *IAM-1.5.0.9-4.tar.gz* file, unzip & untar and then load the image:
-```bash
-docker load -i iam_image.tar
+docker pull containers.intersystems.com/intersystems/iris:2021.1.0.205.0
+docker pull containers.intersystems.com/intersystems/iam:2.3.3.2-1
 ```
 
 ## IAM enabled IRIS license
