@@ -1,9 +1,12 @@
-FROM containers.intersystems.com/intersystems/iris:2021.1.0.205.0
+FROM containers.intersystems.com/intersystems/iris:2021.1.0.215.0
 ARG WEBINAR_INCLUDE_API
 USER root
 
 COPY --chown=$ISC_PACKAGE_MGRUSER:$ISC_PACKAGE_IRISGROUP irissession.sh /
 RUN chmod +x /irissession.sh
+
+# copy license
+COPY iris.key /usr/irissys/mgr/iris.key
 
 # copy source code
 RUN mkdir -p /opt/webinar/install
@@ -30,6 +33,8 @@ RUN mkdir -p /tmp/deps \
 SHELL ["/irissession.sh"]
 
 RUN \
+    # activate license
+    do $system.License.Upgrade() \
     zn "USER" \
     # load & compile source code
     do $system.OBJ.Load("/opt/webinar/src/Webinar/Installer.cls", "ck") \

@@ -25,7 +25,7 @@ docker login -u="user" -p="token" containers.intersystems.com
 ```
 * Download images:
 ```bash
-docker pull containers.intersystems.com/intersystems/iris:2021.1.0.205.0
+docker pull containers.intersystems.com/intersystems/iris:2021.1.0.215.0
 docker pull containers.intersystems.com/intersystems/iam:2.3.3.2-1
 ```
 
