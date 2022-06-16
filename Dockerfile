@@ -1,4 +1,4 @@
-FROM containers.intersystems.com/intersystems/iris:2021.1.0.215.0
+FROM containers.intersystems.com/intersystems/iris:2022.1.0.209.0
 ARG WEBINAR_INCLUDE_API
 USER root
 

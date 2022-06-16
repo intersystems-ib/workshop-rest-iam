@@ -4,15 +4,15 @@
     <AccountNeverExpires>true</AccountNeverExpires>
     <AutheEnabled>0</AutheEnabled>
     <ChangePassword>false</ChangePassword>
-    <CreateDateTime>65559,49486.273898</CreateDateTime>
+    <CreateDateTime>66260,77689.626956871</CreateDateTime>
     <Enabled>true</Enabled>
     <ExpirationDate>1840-12-31</ExpirationDate>
     <Flags>1</Flags>
     <FullName>User for /api/iam Web Application</FullName>
-    <HOTPKey>0DAcwOp5xQSFDlpul+AeYMhpcF8=</HOTPKey>
+    <HOTPKey>VY7eZk/FAsmP7QWgNILmvLJaAiA=</HOTPKey>
     <HOTPKeyGenerate>false</HOTPKeyGenerate>
     <HOTPKeyDisplay>false</HOTPKeyDisplay>
-    <LastModifiedDateTime>65623,37019.832752</LastModifiedDateTime>
+    <LastModifiedDateTime>66276,38985.0004513</LastModifiedDateTime>
     <LastModifiedInfo>
 Enabled modified:
   New value: Yes
@@ -24,12 +24,16 @@ Password modified:
 </LastModifiedInfo>
     <LastModifiedUsername>SuperUser</LastModifiedUsername>
     <Name>IAM</Name>
-    <Password>4BnynQwFCJFECG9ZqINnT3lC/vY=</Password>
+    <Password>SgBj5y8xsxHttGS8njmZec+IbedYnOaKJhCWX50bz1S1Vs6b7V8k60qhB2XTGTGYllaFI38IFKMG4HAah0AqGw==</Password>
     <PasswordNeverExpires>true</PasswordNeverExpires>
-    <PasswordChangedDateTime>65623,37019.832609</PasswordChangedDateTime>
+    <PasswordChangedDateTime>66276,38985.000325585</PasswordChangedDateTime>
+    <PasswordReset>false</PasswordReset>
     <Roles>
       <RolesItem>%IAM_API</RolesItem>
     </Roles>
-    <Salt>FT33QuW0h9c=</Salt>
+    <Salt>ioIrFaXiSUw0ldJ+yzw6MIAARIc4id3z6QheyGbVFGdtg0tzgGSE3MhSDp+y5WxUiXt1RLw440uuvphMpyx/Tw==</Salt>
+    <PasswordHashAlgorithm>SHA512</PasswordHashAlgorithm>
+    <PasswordHashWorkFactor>10000</PasswordHashWorkFactor>
+    <Version>1</Version>
   </Users>
 </UsersExport>

@@ -24,6 +24,7 @@ services:
       args:
         WEBINAR_INCLUDE_API: "no"
     container_name: irisA
+    command: --check-caps false
     image: workshop-rest-iam:noapi
     ports:
     - "52773:52773"
@@ -39,6 +40,7 @@ services:
         WEBINAR_INCLUDE_API: "yes"
     image: workshop-rest-iam:api
     container_name: irisB
+    command: --check-caps false
     ports:
     - "52774:52773"
     volumes:
@@ -53,6 +55,7 @@ services:
         WEBINAR_INCLUDE_API: "yes"
     image: workshop-rest-iam:api
     container_name: irisC
+    command: --check-caps false
     ports:
     - "52775:52773"
     volumes:
@@ -101,6 +104,9 @@ services:
       KONG_PORTAL_GUI_PROTOCOL: http
       KONG_PORTAL_GUI_HOST: '127.0.0.1:8003'
       KONG_ADMIN_GUI_URL: http://localhost:8002
+      #KONG_ENFORCE_RBAC: 'on'
+      #KONG_ADMIN_GUI_AUTH: basic-auth
+      #KONG_ADMIN_GUI_SESSION_CONF: '{"cookie_name":"iam-admingui", "secret":"change-this-secret","storage":"kong","cookie_secure":false}'
       ISC_IRIS_URL: "${ISC_IRIS_URL}"
       ISC_CA_CERT: "${ISC_CA_CERT}"
     links:

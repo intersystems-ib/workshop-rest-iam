@@ -1,7 +1,7 @@
 {
     "objectscript.export.folder": "src",
     "objectscript.conn": {
-        "active": false,
+        "active": true,
         "username": "superuser",
         "password": "SYS",
         "docker-compose": {

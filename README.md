@@ -25,7 +25,7 @@ docker login -u="user" -p="token" containers.intersystems.com
 ```
 * Download images:
 ```bash
-docker pull containers.intersystems.com/intersystems/iris:2021.1.0.215.0
+docker pull containers.intersystems.com/intersystems/iris:2022.1.0.209.0
 docker pull containers.intersystems.com/intersystems/iam:2.3.3.2-1
 ```
 
@@ -254,12 +254,43 @@ curl -X POST --url http://iam:8001/services/ \
 --data 'name=iris-leaderboard-v1-service' \
 --data 'url=http://irisA:52773/leaderboard/api/v1' | jq
 ```
-* Add a **route** that will give access to the service you have just created.
+* Add some **routes** that will give access to the service you have just created.
+
 ```bash
 curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
---data 'paths[]=/leaderboard' | jq
-```  
+--data 'paths[]=/leaderboard' \
+--data 'name=leaderboard-GET' \
+--data 'methods[]=GET'| jq
+```
+
+```bash
+curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+--data 'paths[]=/leaderboard' \
+--data 'name=leaderboard-POST' \
+--data 'methods[]=POST'| jq
+```
+
+```bash
+curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+--data 'paths[]=/leaderboard' \
+--data 'name=leaderboard-PUT' \
+--data 'methods[]=PUT'| jq
+```
+
+#### Add request transformer plugin to service
+* Using the request-transformer plugin you can add Basic authentication headers to incoming requests so it will authenticate in IRIS.
+
+```
+curl -i -X POST \
+--url http://iam:8001/services/iris-leaderboard-v1-service/plugins \
+--data 'name=request-transformer' \
+--data 'config.add.headers=Authorization:Basic c3VwZXJ1c2VyOlNZUw==' \
+--data 'config.replace.headers=Authorization:Basic c3VwZXJ1c2VyOlNZUw=='
+```
+
 * In Postman, test the `IAM - Get Player - No auth` request.
+
+### Enable authentication (key-auth)
 * Add Authentication by setting up the `key-auth` plugin in the service. 
 ```bash
 curl -X POST http://iam:8001/services/iris-leaderboard-v1-service/plugins \
@@ -289,8 +320,9 @@ curl -X POST http://iam:8001/consumers/webapp/key-auth -d 'key=webappsecret' | j
 * In Postman, test `IAM - GET Players - Consumer WebApp` request.
 
 ### Rate Limiting 
-* We can simulate some traffic using [shared/simulate.sh](shared/simulate.sh) script. In your *tools* container session type:
-```bash
+* We can simulate some traffic using [shared/simulate.sh](shared/simulate.sh) script in your *tools* container:
+```bash  
+docker exec -it tools sh
 /shared/simulate.sh
 ```
 * Add a restriction for `webapp` consumer. Limit it to 100 requests in a minute.
