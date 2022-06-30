@@ -251,27 +251,27 @@ docker exec -it tools sh
 * Add a **service** to which will invoke the API in IRIS.
 ```bash
 curl -X POST --url http://iam:8001/services/ \
---data 'name=iris-leaderboard-v1-service' \
+--data 'name=iris-leaderboard-service' \
 --data 'url=http://irisA:52773/leaderboard/api/v1' | jq
 ```
 * Add some **routes** that will give access to the service you have just created.
 
 ```bash
-curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+curl -X POST --url http://iam:8001/services/iris-leaderboard-service/routes \
 --data 'paths[]=/leaderboard' \
 --data 'name=leaderboard-GET' \
 --data 'methods[]=GET'| jq
 ```
 
 ```bash
-curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+curl -X POST --url http://iam:8001/services/iris-leaderboard-service/routes \
 --data 'paths[]=/leaderboard' \
 --data 'name=leaderboard-POST' \
 --data 'methods[]=POST'| jq
 ```
 
 ```bash
-curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
+curl -X POST --url http://iam:8001/services/iris-leaderboard-service/routes \
 --data 'paths[]=/leaderboard' \
 --data 'name=leaderboard-PUT' \
 --data 'methods[]=PUT'| jq
@@ -280,9 +280,9 @@ curl -X POST --url http://iam:8001/services/iris-leaderboard-v1-service/routes \
 #### Add request transformer plugin to service
 * Using the request-transformer plugin you can add Basic authentication headers to incoming requests so it will authenticate in IRIS.
 
-```
+```bash
 curl -i -X POST \
---url http://iam:8001/services/iris-leaderboard-v1-service/plugins \
+--url http://iam:8001/services/iris-leaderboard-service/plugins \
 --data 'name=request-transformer' \
 --data 'config.add.headers=Authorization:Basic c3VwZXJ1c2VyOlNZUw==' \
 --data 'config.replace.headers=Authorization:Basic c3VwZXJ1c2VyOlNZUw=='
@@ -293,7 +293,7 @@ curl -i -X POST \
 ### Enable authentication (key-auth)
 * Add Authentication by setting up the `key-auth` plugin in the service. 
 ```bash
-curl -X POST http://iam:8001/services/iris-leaderboard-v1-service/plugins \
+curl -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
 --data "name=key-auth" | jq
 ```
 * In Postman, test again the `IAM - Get Player - No auth` request.
@@ -402,21 +402,14 @@ curl -s -X POST http://iam:8001/upstreams/leaderboard-lb-stream/targets \
     -d weight=500 \
     | jq
 ```
-* Add a **service** referencing the upstream
+
+* Update your **service** to point to the upstream:
 ```bash
-curl -s -X POST http://iam:8001/services/ \
-    --data 'name=leaderboard-lb' \
-    --data 'host=leaderboard-lb-stream' \
-    --data 'path=/leaderboard/api/v1' \
-    | jq
+curl -X PATCH http://iam:8001/services/iris-leaderboard-service \
+  --data host='leaderboard-lb-stream' | jq
 ```
-* Add a **route** to access the service
-```bash
-curl -s -X POST http://iam:8001/services/leaderboard-lb/routes \
-    --data 'paths[]=/leaderboard-lb' \
-    | jq
-```
-* In Postman, test the `IAM - GET Players - LB` request. Pay attention to the `Node` property in the response body.
+
+* In Postman, test the `IAM - GET Players (LB)` request. Pay attention to the `Node` property in the response body.
 
 ## (j). API Manager: Route by Header Scenario
 You will now build a route by header scenario using three IRIS instances with the *leaderboard* REST API.
@@ -466,33 +459,22 @@ curl -s -X POST http://iam:8001/upstreams/leaderboard-header-v2-stream/targets \
     | jq
 ```
 
-* Add a **service** referencing the default upstream:
-
+* Update your **service** to point to the upstream:
 ```bash
-curl -s -X POST http://iam:8001/services/ \
-    --data 'name=leaderboard-header' \
-    --data 'host=leaderboard-header-stream' \
-    --data 'path=/leaderboard/api/v1' \
-    | jq
-```
-
-* Add a **route** to access your service:
-```bash
-curl -s -X POST http://iam:8001/services/leaderboard-header/routes \
-    --data 'paths[]=/leaderboard-header' \
-    | jq
+curl -X PATCH http://iam:8001/services/iris-leaderboard-service \
+  --data host='leaderboard-header-stream' | jq
 ```
 
 * Add `route-by-header` plugin with some conditions on request header `version`:
 
 ```bash
-curl -s -X POST http://iam:8001/services/leaderboard-header/plugins \
+curl -s -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
     -H 'Content-Type: application/json' \
     -d '{"name": "route-by-header", "config": {"rules":[{"condition": {"version":"v1"}, "upstream_name": "leaderboard-header-v1-stream"}, {"condition": {"version":"v2"}, "upstream_name": "leaderboard-header-v2-stream"}]}}' \
     | jq
 ```
 
-* In Postman, try the `IAM - GET Players - Route By Header` using different `version` header request values.
+* In Postman, try the `IAM - GET Players (Route By Header)` using different `version` header request values.
 
 # Explore other scenarios
 Have a look at this example where you can see in action a REST API in IRIS as backend for an Angular application:

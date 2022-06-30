@@ -482,7 +482,7 @@
 					"response": []
 				},
 				{
-					"name": "IAM - GET Players - LB",
+					"name": "IAM - GET Players (LB)",
 					"event": [
 						{
 							"listen": "test",
@@ -511,14 +511,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8000/leaderboard-lb/player",
+							"raw": "http://localhost:8000/leaderboard/player",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
-								"leaderboard-lb",
+								"leaderboard",
 								"player"
 							]
 						}
@@ -526,7 +526,7 @@
 					"response": []
 				},
 				{
-					"name": "IAM - GET Players - Route By Header",
+					"name": "IAM - GET Players (Route By Header)",
 					"event": [
 						{
 							"listen": "test",
@@ -551,7 +551,7 @@
 							},
 							{
 								"key": "version",
-								"value": "v2",
+								"value": "v1",
 								"type": "text"
 							}
 						],
@@ -560,14 +560,14 @@
 							"raw": ""
 						},
 						"url": {
-							"raw": "http://localhost:8000/leaderboard-header/player",
+							"raw": "http://localhost:8000/leaderboard/player",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8000",
 							"path": [
-								"leaderboard-header",
+								"leaderboard",
 								"player"
 							]
 						}
