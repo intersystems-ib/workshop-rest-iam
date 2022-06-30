@@ -476,6 +476,33 @@ curl -s -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
 
 * In Postman, try the `IAM - GET Players (Route By Header)` using different `version` header request values.
 
+## (j). DeCK
+
+decK helps manage Kong’s configuration in a declarative fashion. This means that a developer can define the desired state of Kong Gateway – services, routes, plugins, and more – and let decK handle implementation without needing to execute each step manually, as you would with the Kong Admin API.
+
+https://docs.konghq.com/deck/1.12.x/
+
+Open a interactive session with tools container in order to install and run deCK
+
+``` bash
+docker exec -it tools sh
+```
+
+Install decK in the tools container:
+```bash
+cd /tmp
+curl -sL https://github.com/kong/deck/releases/download/v1.12.2/deck_1.12.2_linux_amd64.tar.gz -o deck.tar.gz
+tar -xf deck.tar.gz -C /tmp
+cp /tmp/deck /usr/local/bin/
+```
+
+Run decK to create a backup of the configuration you have just made:
+```bash
+deck dump --kong-addr http://iam:8001
+```
+
+Now have a look at the file `kong.yaml`.
+
 # Explore other scenarios
 Have a look at this example where you can see in action a REST API in IRIS as backend for an Angular application:
 https://github.com/intersystems-ib/iris-sample-rest-angular
