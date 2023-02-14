@@ -24,12 +24,13 @@ services:
       args:
         WEBINAR_INCLUDE_API: "no"
     container_name: irisA
-    command: --check-caps false
+    command:
+      --key /app/iris.key
     image: workshop-rest-iam:noapi
     ports:
     - "52773:52773"
     volumes:
-    - ./iris.key:/usr/irissys/mgr/iris.key
+    - .:/app
     - ./shared:/shared
 
   # irisB instance  
@@ -40,11 +41,12 @@ services:
         WEBINAR_INCLUDE_API: "yes"
     image: workshop-rest-iam:api
     container_name: irisB
-    command: --check-caps false
+    command:
+      --key /app/iris.key
     ports:
     - "52774:52773"
     volumes:
-    - ./iris.key:/usr/irissys/mgr/iris.key
+    - .:/app
     - ./shared:/shared
 
   # irisC instance 
@@ -55,19 +57,20 @@ services:
         WEBINAR_INCLUDE_API: "yes"
     image: workshop-rest-iam:api
     container_name: irisC
-    command: --check-caps false
+    command:
+      --key /app/iris.key
     ports:
     - "52775:52773"
     volumes:
-    - ./iris.key:/usr/irissys/mgr/iris.key
+    - .:/app
     - ./shared:/shared
 
   # ====================================
-  # IAM - InterSystems API Manager 2.3.3
+  # IAM - InterSystems API Manager 3.0.2
   # ====================================
   iam-migrations:
-    image: "${ISC_IAM_IMAGE}"
-    command: kong migrations bootstrap
+    image: ${ISC_IAM_IMAGE}
+    command: bash -c "kong migrations bootstrap; kong migrations up; kong migrations finish"
     depends_on:
       - db
     environment:
@@ -77,16 +80,15 @@ services:
       KONG_PG_PASSWORD: ${KONG_PG_PASSWORD:-iam}
       KONG_PG_USER: ${KONG_PG_USER:-iam}
       KONG_CASSANDRA_CONTACT_POINTS: db
-      ISC_IRIS_URL: "${ISC_IRIS_URL}"
-      ISC_CA_CERT: "${ISC_CA_CERT}"
+      ISC_IRIS_URL: ${ISC_IRIS_URL}
+      ISC_CA_CERT: ${ISC_CA_CERT}
     restart: on-failure
     links:
       - db:db
   iam:
-    image: "${ISC_IAM_IMAGE}"
+    image: ${ISC_IAM_IMAGE}
     depends_on:
       - db
-      - irisA
     environment:
       KONG_ADMIN_ACCESS_LOG: /dev/stdout
       KONG_ADMIN_ERROR_LOG: /dev/stderr
@@ -104,11 +106,8 @@ services:
       KONG_PORTAL_GUI_PROTOCOL: http
       KONG_PORTAL_GUI_HOST: '127.0.0.1:8003'
       KONG_ADMIN_GUI_URL: http://localhost:8002
-      #KONG_ENFORCE_RBAC: 'on'
-      #KONG_ADMIN_GUI_AUTH: basic-auth
-      #KONG_ADMIN_GUI_SESSION_CONF: '{"cookie_name":"iam-admingui", "secret":"change-this-secret","storage":"kong","cookie_secure":false}'
-      ISC_IRIS_URL: "${ISC_IRIS_URL}"
-      ISC_CA_CERT: "${ISC_CA_CERT}"
+      ISC_IRIS_URL: ${ISC_IRIS_URL}
+      ISC_CA_CERT: ${ISC_CA_CERT}
     links:
       - db:db
     ports:
@@ -138,13 +137,13 @@ services:
         protocol: tcp
     restart: on-failure
   db:
-    image: postgres:9.6
+    image: postgres:14.5
     environment:
       POSTGRES_DB: ${KONG_PG_DATABASE:-iam}
       POSTGRES_PASSWORD: ${KONG_PG_PASSWORD:-iam}
       POSTGRES_USER: ${KONG_PG_USER:-iam}
     volumes:
-      - 'pgdata:/var/lib/postgresql/data'
+      - 'pgdata14:/var/lib/postgresql/data'
     healthcheck:
       test: ["CMD", "pg_isready", "-U", "${KONG_PG_USER:-iam}"]
       interval: 30s
@@ -153,4 +152,4 @@ services:
     restart: on-failure
     stdin_open: true
 volumes:
-  pgdata:
+  pgdata14:

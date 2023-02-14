@@ -1,0 +1,18 @@
+    // unexpire passwords for dev mode
+    set $namespace = "%SYS"
+    do ##class(Security.Users).UnExpireUserPasswords("*")
+    
+    set $namespace = "USER"
+
+    // load & compile installer
+    do $system.OBJ.Load("/opt/webinar/src/Webinar/Installer.cls", "ck")
+    
+    // run installer
+    do ##class(Webinar.Installer).Run()
+
+    // install zpm & webterminal
+    set $namespace = "WEBINAR"
+    do $system.OBJ.Load("/tmp/deps/zpm.xml", "ck")
+    zpm "install webterminal"
+    
+    halt

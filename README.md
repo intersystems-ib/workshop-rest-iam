@@ -25,8 +25,8 @@ docker login -u="user" -p="token" containers.intersystems.com
 ```
 * Download images:
 ```bash
-docker pull containers.intersystems.com/intersystems/iris:2022.1.0.209.0
-docker pull containers.intersystems.com/intersystems/iam:2.3.3.2-1
+docker pull containers.intersystems.com/intersystems/iris:2022.2.0.368.0
+docker pull containers.intersystems.com/intersystems/iam:3.0.2.0-4
 ```
 
 ## IAM enabled IRIS license
@@ -480,7 +480,7 @@ curl -s -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
 
 decK helps manage Kong’s configuration in a declarative fashion. This means that a developer can define the desired state of Kong Gateway – services, routes, plugins, and more – and let decK handle implementation without needing to execute each step manually, as you would with the Kong Admin API.
 
-https://docs.konghq.com/deck/1.12.x/
+https://docs.konghq.com/deck/
 
 * Open a interactive session with tools container in order to install and run deCK
 
@@ -491,7 +491,7 @@ docker exec -it tools sh
 * Install decK in the tools container:
 ```bash
 cd /tmp
-curl -sL https://github.com/kong/deck/releases/download/v1.12.2/deck_1.12.2_linux_amd64.tar.gz -o deck.tar.gz
+curl -sL https://github.com/Kong/deck/releases/download/v1.17.3/deck_1.17.3_linux_arm64.tar.gz -o deck.tar.gz
 tar -xf deck.tar.gz -C /tmp
 cp /tmp/deck /usr/local/bin/
 ```
