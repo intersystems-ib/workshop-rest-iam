@@ -552,7 +552,7 @@ You can find your hosts file in:
 | MacOS | `/private/etc/hosts` |
 | Windows | `c:\Windows\System32\Drivers\etc\hosts` |
 
-### Run Keycloak (OIDC Identity Provider)
+### Run Keycloak (OIDC Identity Provider)
 
 Run Keycloak as your Identity Provider:
 
