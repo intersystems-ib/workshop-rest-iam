@@ -578,7 +578,7 @@ Click on **Clients**
 
 Click on **Create**
 
-<img src="img/keycloak-add-client.png" width="800" />
+<img src="img/keycloak-add-client.png" width="500" />
 
 Create a new client:
 * Client ID: `iam`
