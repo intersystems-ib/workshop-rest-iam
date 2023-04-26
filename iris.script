@@ -1,6 +1,9 @@
     // unexpire passwords for dev mode
     set $namespace = "%SYS"
     do ##class(Security.Users).UnExpireUserPasswords("*")
+
+    write ##class(Security.Applications).Import("/opt/irisapp/install/rest-webapp.xml")
+    
     
     set $namespace = "USER"
 
@@ -14,5 +17,11 @@
     set $namespace = "WEBINAR"
     do $system.OBJ.Load("/tmp/deps/zpm.xml", "ck")
     zpm "install webterminal"
+
+    // auto start interop production
+    set production = "Webinar.Production"
+    set ^Ens.Configuration("csp","LastProduction") = production
+    do ##class(Ens.Director).SetAutoStart(production)
+
     
     halt

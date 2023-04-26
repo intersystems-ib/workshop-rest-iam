@@ -32,7 +32,7 @@ docker pull containers.intersystems.com/intersystems/iam:3.0.2.0-4
 ## IAM enabled IRIS license
 **IMPORTANT!** Copy your InterSystems IRIS IAM enabled license file into the workshop root and rename it to `iris.key`.
 
-## Build the image
+## Build IRIS image
 Build the image we will use during the workshop:
 
 ```console
@@ -43,13 +43,12 @@ $ docker-compose build
 
 # Examples
 
-## (a). Run containers and access IAM
-* Run the containers we will use in the workshop and check you access them:
+## (a). Run IRIS container
+* Run the containers we will use in this section and check you access them:
 ```bash
-docker-compose up
+docker-compose up -d irisA tools
 ```
 * Access [IRIS Management Portal](http://localhost:52773/csp/sys/UtilHome.csp) using `superuser`/`SYS`.
-* Access [IAM Management Portal](http://localhost:8002/overview).
 
 ## (b). OpenAPI specification
 * We will use an OpenAPI specification as a starting point to build a REST API in IRIS.
@@ -236,6 +235,14 @@ ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 
 
 ## (h). API Manager: Basic Scenario
+
+Run API manager container and access [IAM Management Portal](http://localhost:8002/overview):
+
+```bash
+cd iam
+docker-compose up -d
+```
+
 Now, you will build a basic scenario to manage the REST API in InterSystems API Manager (IAM).
 
 Remember IAM can be managed using the UI or using the REST interface.
@@ -370,7 +377,14 @@ curl -X POST http://iam:8001/plugins/ \
 * Try again some IAM requests in Postman and check the audit file.
 
 
-## (i). API Manager: Load Balancing Scenario
+## Scenario: API Manager Load Balancing
+
+In this scenario, you will need a second IRIS instance:
+
+```bash
+docker-compose up -d irisB
+```
+
 You will build a load balancing scenario between two IRIS instances with the *leaderboard* REST API.
 
 This can be useful in case you want to spread the workload, blue-green deployment, etc.
@@ -411,7 +425,14 @@ curl -X PATCH http://iam:8001/services/iris-leaderboard-service \
 
 * In Postman, test the `IAM - GET Players (LB)` request. Pay attention to the `Node` property in the response body.
 
-## (j). API Manager: Route by Header Scenario
+## Scenario: Route by Header in API Manager
+
+In this scenario, you will need a third iris instance:
+
+```bash
+docker-compose up -d irisC
+```
+
 You will now build a route by header scenario using three IRIS instances with the *leaderboard* REST API.
 
 This could be useful in case you want use different servers depending on request headers (e.g. different versions).
@@ -476,7 +497,7 @@ curl -s -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
 
 * In Postman, try the `IAM - GET Players (Route By Header)` using different `version` header request values.
 
-## (j). DeCK
+## Managing API Manager configuration using DeCK
 
 decK helps manage Kong’s configuration in a declarative fashion. This means that a developer can define the desired state of Kong Gateway – services, routes, plugins, and more – and let decK handle implementation without needing to execute each step manually, as you would with the Kong Admin API.
 
@@ -513,6 +534,116 @@ deck diff --kong-addr http://iam:8001
 deck sync --kong-addr http://iam:8001
 ```
 
-# Explore other scenarios
-Have a look at this example where you can see in action a REST API in IRIS as backend for an Angular application:
-https://github.com/intersystems-ib/iris-sample-rest-angular
+## Scenario: Using an OIDC Identity Provider in your APIs
+
+<img src="img/scenario-oidc.png" width="800" />
+
+### Setup
+
+* Modify your local hosts file 
+Add a line to resolve `keycloak` to 127.0.0.1
+```
+127.0.0.1 keycloak
+```
+
+You can find your hosts file in:
+| O.S. | File |
+| --------- | ----------- |
+| MacOS | `/private/etc/hosts` |
+| Windows | `c:\Windows\System32\Drivers\etc\hosts` |
+
+### Run Keycloak (OIDC Identity Provider)
+
+Run Keycloak as your Identity Provider:
+
+```bash
+cd keycloak
+docker-compose up -d
+```
+#### Login to Keycloak Administration Console
+
+* Access your local Keycloak in: https://localhost:7443
+* Login into Administration Console using `admin` / `test`
+
+<img src="img/keycloak.png" width="800" />
+
+We are going to use the default "master" realm.
+
+#### Create a client in KeyCloak
+Create a client that will represent IAM (API Manager).
+
+Click on **Clients**
+
+<img src="img/keycloak-client.png" width="800" />
+
+Click on **Create**
+
+<img src="img/keycloak-add-client.png" width="800" />
+
+Create a new client:
+* Client ID: `iam`
+* Click **Save**
+
+<img src="img/keycloak-edit-client.png" width="600" />
+
+Edit `iam` client:
+* Access Type: `confidential`
+* Service Accounts Enabled: `On`
+* Root URL: `https://iam:8443`
+* Valid Redirect URIs: `/oidc-route/*`
+
+Click on **Credentials** tab and copy Secret:
+
+<img src="img/keycloak-client-credentials.png" width="600" />
+
+#### Create a user
+
+Create a user that you will use to login when using your API:
+
+Click on **Users** and **Add User**:
+
+<img src="img/keycloak-add-user.png" width="600" />
+
+Enter the following:
+* Name: `test`
+* Click **Save**
+
+<img src="img/keycloak-user-credentials.png" width="600" />
+
+Click on **Credentials** tab and set a new password:
+* Temporary: `Off`
+
+
+### Add service / route to API Manager
+
+* Add a service
+
+```bash
+curl -X POST --url http://iam:8001/services/ \
+--data 'name=oidc-service' \
+--data 'url=http://irisA:52773/rest/GenericService/anything' | jq
+```
+* Add a route
+
+```bash
+curl -X POST --url http://iam:8001/services/oidc-service/routes \
+--data 'paths[]=/oidc-route' \
+--data 'name=oidc-route' \
+--data 'methods[]=GET'| jq
+```
+
+* Test the route by opening in your browser https://iam:8443/oidc-route/somedata
+
+### Add OIDC plugin to your route
+
+* Add OpenId Connect Plugin to the route
+
+IAM > Routes > oidc-route > Add Plugin > OpenID Connect
+
+* Client ID: `iam`
+* Client Secret: <the secret you copied from Keycloak>
+* Issuer (Discovery Document URI): `https://keycloak:7443/auth/realms/master/.well-known/openid-configuration`
+
+* Test the route again, now it should prompt a Keycloack Login Page where you can login with the user you created and finally access the API: https://iam:8443/oidc-route/somedata
+
+<img src="img/oidc-plugin-test.gif" width="1024" />
