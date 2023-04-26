@@ -41,28 +41,28 @@ $ cd workshop-rest-iam
 $ docker-compose build
 ```
 
-# Examples
+# Scenario: Develop a REST API
 
-## (a). Run IRIS container
+## Run IRIS container
 * Run the containers we will use in this section and check you access them:
 ```bash
 docker-compose up -d irisA tools
 ```
 * Access [IRIS Management Portal](http://localhost:52773/csp/sys/UtilHome.csp) using `superuser`/`SYS`.
 
-## (b). OpenAPI specification
+## OpenAPI specification
 * We will use an OpenAPI specification as a starting point to build a REST API in IRIS.
 * Check the YAML version in [shared/leaderboard-api-v1.yaml](shared/leaderboard-api-v1.yaml) and the JSON version in [shared/leaderboard-api-v1.json](shared/leaderboard-api-v1.json)
 * Have a look at it using https://editor.swagger.io or https://app.swaggerhub.com/login.
 
-## (c). Data classes and %JSON.Adaptor
+## Data classes and %JSON.Adaptor
 * The sample API we are developing will use two main persistent (table) classes that will hold data for us. 
 * Have a look at [Webinar.Data.Player](src/Webinar/Data/Player.cls) and [Webinar.Data.Team](src/Webinar/Data/Team.cls).
 * Notice that both classes inherit from `%Persistent` and `%JSON.Adaptor`.
 * If you are not familiar with `%JSON.Adaptor` and transforming objects to and from JSON, check this great article [JSON Enhancements](https://community.intersystems.com/post/json-enhancements) on Developer Community.
 * Check also the generated data through *System Explorer > SQL*.
 
-## (d). Generate API from OpenAPI specifications
+## Generate API from OpenAPI specifications
 * Let's build the API implementation skeleton from the OpenAPI specification using `^%REST` wizard.
 * Open a WebTerminal session using http://localhost:52773/terminal/ and type: 
 ```console
@@ -93,7 +93,7 @@ Web application name: /leaderboard/api/v1
 Application Webinar.API.Leaderboard.v1 deployed to /leaderboard/api/v1
 ```
 
-## (e). Implement REST API methods
+## Implement REST API methods
 * Using VS Code, complete the code of the following methods in `Webinar.API.Leaderboard.v1.impl`.
 
 ### addPlayer
@@ -178,12 +178,12 @@ ClassMethod deletePlayer(playerId As %Integer) As %DynamicObject
 }
 ```
 
-## (f). Test the API
+## Test the API
 * Configure the automatically created web endpoint called `/leaderboard/api/v1` in [Web Applications](http://localhost:52773/csp/sys/sec/%25CSP.UI.Portal.Applications.WebList.zen). Set unauthenticated access and set `Webinar` temporal role.
 * In Postman, import [postman/leaderboard-api.postman_collection.json](postman/leaderboard-api.postman_collection.json) collection.
 * Try these requests: `GET Player`, `GET Players`, `POST Player` y `PUT Player`.
 
-## (g). Make your REST API part of an interoperability production (optional)
+## (Optional) Make your REST API part of an interoperability production
 
 You'll plug the API implementation into a production, so you could use any feature of interoperability productions withing a REST API implementation.
 
@@ -234,7 +234,7 @@ ClassMethod getPlayerById(playerId As %Integer) As %DynamicObject
 * **IMPORTANT!** In order to continue the next sections, stop the production and revert the changes on [src/Webinar/API/Leaderboard/v1/impl.cls](src/Webinar/API/Leaderboard/v1/impl.cls) `getPlayerById` to continue. Test again the `GET Player` request in Postman and check it's OK.
 
 
-## (h). API Manager: Basic Scenario
+# Scenario: Use API Manager to manage your APIs
 
 Run API manager container and access [IAM Management Portal](http://localhost:8002/overview):
 
@@ -254,7 +254,7 @@ docker exec -it tools sh
 
 <img src="img/scenario-basic.png">
 
-### Add API to API Manager
+## Add API to API Manager
 * Add a **service** to which will invoke the API in IRIS.
 ```bash
 curl -X POST --url http://iam:8001/services/ \
@@ -284,7 +284,7 @@ curl -X POST --url http://iam:8001/services/iris-leaderboard-service/routes \
 --data 'methods[]=PUT'| jq
 ```
 
-#### Add request transformer plugin to service
+### Add request transformer plugin to service
 * Using the request-transformer plugin you can add Basic authentication headers to incoming requests so it will authenticate in IRIS.
 
 ```bash
@@ -297,7 +297,7 @@ curl -i -X POST \
 
 * In Postman, test the `IAM - Get Player - No auth` request.
 
-### Enable authentication (key-auth)
+## Enable authentication (key-auth)
 * Add Authentication by setting up the `key-auth` plugin in the service. 
 ```bash
 curl -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
@@ -305,7 +305,7 @@ curl -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
 ```
 * In Postman, test again the `IAM - Get Player - No auth` request.
 
-### Consumers
+## Consumers
 * Create some consumers so you can authenticate to access the API.
 * Create consumer `systemA`
 ```bash
@@ -326,7 +326,7 @@ curl -X POST http://iam:8001/consumers/webapp/key-auth -d 'key=webappsecret' | j
 ```
 * In Postman, test `IAM - GET Players - Consumer WebApp` request.
 
-### Rate Limiting 
+## Rate Limiting 
 * We can simulate some traffic using [shared/simulate.sh](shared/simulate.sh) script in your *tools* container:
 ```bash  
 docker exec -it tools sh
@@ -340,7 +340,7 @@ curl -X POST http://iam:8001/consumers/webapp/plugins \
 ```
 * Remove the restriction using the IAM Portal so you can continue.
 
-### Developer Portal
+## Developer Portal
 * Set up the Developer Portal in IAM so developers could sign up automatically.
 * Go to [IAM Portal](http://localhost:8002/default/dashboard) and `Dev Portal > Settings`:
 * Set `Authentication Plugin=Basic`
@@ -359,13 +359,13 @@ curl -X POST http://iam:8001/consumers/webapp/plugins \
 * Click on `New File +` and set `File Type=spec` and `File Path=leaderboard.yaml`.
 * Copy the content of [leaderboard-api-v1.yaml](shared/leaderboard-api-v1.yaml). 
 
-### API credentials and developers
+## API credentials and developers
 * Go to the [Developer Portal](http://127.0.0.1:8003/default) and click `Sign Up`.
 * Logged as a developer, create your own API credential in `Create API Credential`.
 * In Postman, test `IAM - Get Players - Developer` replacing the `api-key` header by the actual credential you have just created.
 * Access the APIs documentation in `Documentation`.
 
-### Auditing
+## Auditing
 * There are different ways of exposing the audit logs. For instance, you can configure a global http log plugin to push logs to your remote audit interface.
 * In this case you can use a very simple REST audit interface that will audit IAM requests into `shared/audit.json` file.
 ```bash
@@ -377,7 +377,7 @@ curl -X POST http://iam:8001/plugins/ \
 * Try again some IAM requests in Postman and check the audit file.
 
 
-## Scenario: API Manager Load Balancing
+# Scenario: API Manager Load Balancing
 
 In this scenario, you will need a second IRIS instance:
 
@@ -425,7 +425,7 @@ curl -X PATCH http://iam:8001/services/iris-leaderboard-service \
 
 * In Postman, test the `IAM - GET Players (LB)` request. Pay attention to the `Node` property in the response body.
 
-## Scenario: Route by Header in API Manager
+# Scenario: Route by Header in API Manager
 
 In this scenario, you will need a third iris instance:
 
@@ -497,7 +497,7 @@ curl -s -X POST http://iam:8001/services/iris-leaderboard-service/plugins \
 
 * In Postman, try the `IAM - GET Players (Route By Header)` using different `version` header request values.
 
-## Managing API Manager configuration using DeCK
+# Managing API Manager configuration using DeCK
 
 decK helps manage Kong’s configuration in a declarative fashion. This means that a developer can define the desired state of Kong Gateway – services, routes, plugins, and more – and let decK handle implementation without needing to execute each step manually, as you would with the Kong Admin API.
 
@@ -534,11 +534,11 @@ deck diff --kong-addr http://iam:8001
 deck sync --kong-addr http://iam:8001
 ```
 
-## Scenario: Using an OIDC Identity Provider in your APIs
+# Scenario: Using an OIDC Identity Provider in your APIs
 
 <img src="img/scenario-oidc.png" width="800" />
 
-### Setup
+## Setup
 
 * Modify your local hosts file 
 Add a line to resolve `keycloak` to 127.0.0.1
@@ -552,7 +552,7 @@ You can find your hosts file in:
 | MacOS | `/private/etc/hosts` |
 | Windows | `c:\Windows\System32\Drivers\etc\hosts` |
 
-### Run Keycloak (OIDC Identity Provider)
+## Run Keycloak (OIDC Identity Provider)
 
 Run Keycloak as your Identity Provider:
 
@@ -560,7 +560,7 @@ Run Keycloak as your Identity Provider:
 cd keycloak
 docker-compose up -d
 ```
-#### Login to Keycloak Administration Console
+### Login to Keycloak Administration Console
 
 * Access your local Keycloak in: https://localhost:7443
 * Login into Administration Console using `admin` / `test`
@@ -569,7 +569,7 @@ docker-compose up -d
 
 We are going to use the default "master" realm.
 
-#### Create a client in KeyCloak
+### Create a client in KeyCloak
 Create a client that will represent IAM (API Manager).
 
 Click on **Clients**
@@ -596,7 +596,7 @@ Click on **Credentials** tab and copy Secret:
 
 <img src="img/keycloak-client-credentials.png" width="600" />
 
-#### Create a user
+### Create a user
 
 Create a user that you will use to login when using your API:
 
@@ -614,7 +614,7 @@ Click on **Credentials** tab and set a new password:
 * Temporary: `Off`
 
 
-### Add service / route to API Manager
+## Add service / route to API Manager
 
 * Add a service
 
@@ -634,7 +634,7 @@ curl -X POST --url http://iam:8001/services/oidc-service/routes \
 
 * Test the route by opening in your browser https://iam:8443/oidc-route/somedata
 
-### Add OIDC plugin to your route
+## Add OIDC plugin to your route
 
 * Add OpenId Connect Plugin to the route
 
