@@ -634,7 +634,7 @@ curl -X POST --url http://iam:8001/services/oidc-service/routes \
 
 * Test the route by opening in your browser https://iam:8443/oidc-route/somedata
 
-### Add OIDC plugin to your route
+### Add OIDC plugin to your route
 
 * Add OpenId Connect Plugin to the route
 
