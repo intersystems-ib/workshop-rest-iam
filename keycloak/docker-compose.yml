@@ -31,3 +31,4 @@ services:
 networks:
   default:
       name: iam-network
+      external: true
