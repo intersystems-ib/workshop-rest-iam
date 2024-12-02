@@ -35,10 +35,10 @@ docker pull containers.intersystems.com/intersystems/iam:3.0.2.0-4
 ## Build IRIS image
 Build the image we will use during the workshop:
 
-```console
-$ git clone https://github.com/intersystems-ib/workshop-rest-iam
-$ cd workshop-rest-iam
-$ docker-compose build
+```bash
+git clone https://github.com/intersystems-ib/workshop-rest-iam
+cd workshop-rest-iam
+docker compose build
 ```
 
 # Scenario: Develop a REST API
@@ -46,7 +46,7 @@ $ docker-compose build
 ## Run IRIS container
 * Run the containers we will use in this section and check you access them:
 ```bash
-docker-compose up -d irisA tools
+docker compose up -d irisA tools
 ```
 * Access [IRIS Management Portal](http://localhost:52773/csp/sys/UtilHome.csp) using `superuser`/`SYS`.
 
@@ -240,7 +240,7 @@ Run API manager container and access [IAM Management Portal](http://localhost:80
 
 ```bash
 cd iam
-docker-compose up -d
+docker compose up -d
 ```
 
 Now, you will build a basic scenario to manage the REST API in InterSystems API Manager (IAM).
@@ -382,7 +382,7 @@ curl -X POST http://iam:8001/plugins/ \
 In this scenario, you will need a second IRIS instance:
 
 ```bash
-docker-compose up -d irisB
+docker compose up -d irisB
 ```
 
 You will build a load balancing scenario between two IRIS instances with the *leaderboard* REST API.
@@ -430,7 +430,7 @@ curl -X PATCH http://iam:8001/services/iris-leaderboard-service \
 In this scenario, you will need a third iris instance:
 
 ```bash
-docker-compose up -d irisC
+docker compose up -d irisC
 ```
 
 You will now build a route by header scenario using three IRIS instances with the *leaderboard* REST API.
@@ -558,7 +558,7 @@ Run Keycloak as your Identity Provider:
 
 ```bash
 cd keycloak
-docker-compose up -d
+docker compose up -d
 ```
 ### Login to Keycloak Administration Console
 
